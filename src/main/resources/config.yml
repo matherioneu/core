@@ -1,0 +1,5 @@
+type: "survival"
+
+currencies:
+  credits:
+    display-name: "Kredity"

@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+}
+
+group = 'eu.matherion'
+version = 'beta'
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://jitpack.io'
+    }
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
+    flatDir {
+        dirs('libs')
+    }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly 'me.clip:placeholderapi:2.11.4'
+    compileOnly 'net.luckperms:api:5.4'
+
+    compileOnly fileTree(include: ['*.jar'], dir: 'libs')
+
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    compileOnly 'org.jetbrains:annotations:16.0.2'
+    annotationProcessor 'org.jetbrains:annotations:16.0.2'
+
+    compileOnly 'com.github.itIsMaku.Mommons:mommons-spigot:2.3.1'
+    compileOnly 'com.github.itIsMaku.Mommons:mommons-shared:2.3.1'
+    compileOnly 'com.github.itIsMaku.Mommons:mommons-worker:2.3.1'
+    compileOnly 'com.github.itIsMaku.Mommons:mommons-entityframework:2.3.1'
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

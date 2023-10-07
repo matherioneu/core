@@ -1,0 +1,12 @@
+main: eu.matherion.core.CoreApplication
+name: MatherionCore
+version: '${version}'
+author: maku
+description: Core plugin for Matherion servers
+api-version: 1.20
+depend:
+  - MommonsLoader
+softdepend:
+  - TradeMe
+  - PlaceholderAPI
+  - LuckPerms
