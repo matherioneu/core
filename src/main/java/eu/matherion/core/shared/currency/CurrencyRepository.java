@@ -2,6 +2,8 @@ package eu.matherion.core.shared.currency;
 
 import com.google.common.collect.Maps;
 import cz.maku.mommons.ef.Entities;
+import cz.maku.mommons.ef.annotation.Id;
+import cz.maku.mommons.ef.annotation.Ignored;
 import cz.maku.mommons.ef.repository.DefaultRepository;
 import cz.maku.mommons.ef.statement.CompletedStatement;
 import cz.maku.mommons.ef.statement.MySQLStatementImpl;
@@ -12,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -57,5 +60,44 @@ public class CurrencyRepository extends DefaultRepository<String, CurrencyData> 
 
         MySQLStatementImpl mySQLStatement = new MySQLStatementImpl(statement.toString(), StatementType.SELECT);
         return getObjectsFromStatement(mySQLStatement);
+    }
+
+    private Pair<String, Map<Integer, Object>> makeWhereCondition(Map<String, Object> conditions) {
+        StringBuilder statement = new StringBuilder(" WHERE ");
+        Map<Integer, Object> arguments = Maps.newHashMap();
+        int i = 0;
+        for (Map.Entry<String, Object> entry : conditions.entrySet()) {
+            i++;
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (i > 1 && i <= conditions.size()) {
+                statement.append(" AND ");
+            }
+            statement.append(String.format("%s = ?", key));
+            arguments.put(i, value);
+        }
+        return new Pair<>(statement.toString(), arguments);
+    }
+
+
+    @Override
+    public List<CurrencyData> selectFieldValues(Map<String, Object> values) {
+        StringBuilder statement = new StringBuilder(prepareStatement("SELECT * FROM {table}"));
+        Pair<String, Map<Integer, Object>> pair = makeWhereCondition(values);
+        statement.append(pair.getFirst());
+        MySQLStatementImpl mySQLStatement = new MySQLStatementImpl(statement.toString(), StatementType.SELECT, pair.getSecond());
+        System.out.println(statement.toString());
+        return getObjectsFromStatement(mySQLStatement);
+    }
+
+    @Override
+    public void update(CurrencyData data) {
+        Class<?> objectClass = data.getClass();;
+        MySQLStatementImpl mySQLStatement = new MySQLStatementImpl(prepareStatement("UPDATE {table} SET amount = ? WHERE player = ? AND currency = ?"), StatementType.UPDATE);
+        mySQLStatement.setArgumentValue(1, data.getAmount());
+        mySQLStatement.setArgumentValue(2, data.getPlayer());
+        mySQLStatement.setArgumentValue(3, data.getCurrency().getName());
+        System.out.println(mySQLStatement.getStatement());
+        mySQLStatement.complete(connection);
     }
 }

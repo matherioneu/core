@@ -11,7 +11,11 @@ import eu.matherion.core.shared.permissions.luckperms.LuckPermsDependencyProvide
 import eu.matherion.core.shared.placeholderapi.PlaceholderAPIDependencyProvider;
 import eu.matherion.core.shared.player.PlayerHandlingBukkitService;
 import eu.matherion.core.shared.player.PlayerService;
+import eu.matherion.core.survival.listener.ChatListenerService;
+import eu.matherion.core.survival.listener.PvPListenerService;
+import eu.matherion.core.survival.listener.SecurityListenerService;
 import eu.matherion.core.survival.trade.TradeDependencyProvider;
+import eu.matherion.core.survival.administrator.AdminBukkitService;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +24,7 @@ import java.util.logging.Logger;
 public class CoreApplication extends WorkerPlugin {
 
     private Map<Class<? extends CoreDependency<?>>, CoreDependency<?>> dependencies = Maps.newHashMap();
+    private String coreType;
 
     public static Map<Class<? extends CoreDependency<?>>, CoreDependency<?>> getDependencies() {
         return CoreApplication.getPlugin(CoreApplication.class).dependencies;
@@ -34,8 +39,17 @@ public class CoreApplication extends WorkerPlugin {
     }
 
     @Override
+    public void preLoad() {
+        coreType = getConfig().getString("type");
+    }
+
+    @Override
     public List<Class<?>> registerServices() {
-        return Lists.newArrayList(CurrencyService.class, CurrencyBukkitService.class, PlayerService.class, PlayerHandlingBukkitService.class);
+        List<Class<?>> services = Lists.newArrayList(CurrencyService.class, CurrencyBukkitService.class, PlayerService.class, PlayerHandlingBukkitService.class);
+        if (coreType.equals("survival")) {
+            services.addAll(List.of(AdminBukkitService.class, PvPListenerService.class, SecurityListenerService.class, ChatListenerService.class));
+        }
+        return services;
     }
 
     @Override
@@ -43,12 +57,11 @@ public class CoreApplication extends WorkerPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
         Logger logger = getLogger();
-        String serverType = getConfig().getString("type");
-        if (serverType == null) {
+        if (coreType == null) {
             logger.severe("Server type is not defined in config.yml.");
             return;
         }
-        if (serverType.equals("survival")) {
+        if (coreType.equals("survival")) {
             logger.info("Core plugin will be loaded for survival server.");
             dependencies = CoreDependencies.resolveDependencies(TradeDependencyProvider.class, PlaceholderAPIDependencyProvider.class, LuckPermsDependencyProvider.class);
         }

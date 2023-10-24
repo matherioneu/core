@@ -21,13 +21,27 @@ import java.util.logging.Logger;
 @Service(scheduled = true)
 public class CurrencyService {
 
+    public static final ExpiringMap<String, List<CurrencyData>> CACHE = ExpiringMap.from(2, ChronoUnit.MINUTES);
     @Getter
     private final Map<String, Currency> currencies = Maps.newHashMap();
-    public static final ExpiringMap<String, List<CurrencyData>> CACHE = ExpiringMap.from(2, ChronoUnit.MINUTES);
     private CurrencyRepository repository;
     @Load
     private PlayerService playerService;
 
+    public static double getCachedBalance(String nickname, String currency) {
+        Logger logger = CoreApplication.logger();
+        List<CurrencyData> balances = CACHE.get(nickname);
+        if (balances == null) {
+            logger.warning("Cannot find balance for player " + nickname + " and currency " + currency + ": cache is empty.");
+            return 0;
+        }
+        Optional<CurrencyData> possibleBalance = balances.stream().filter(balanceData -> balanceData.getCurrency().getName().equalsIgnoreCase(currency)).findFirst();
+        if (possibleBalance.isEmpty()) {
+            logger.warning("Cannot find balance for player " + nickname + " and currency " + currency + ": currency doesn't exist in player's cache.");
+            return 0;
+        }
+        return possibleBalance.get().getAmount();
+    }
 
     @Initialize
     private void initialization() {
@@ -35,7 +49,6 @@ public class CurrencyService {
 
         CurrencyPlaceholder currencyPlaceholder = new CurrencyPlaceholder();
         CorePlaceholders.register(currencyPlaceholder);
-
     }
 
     @Initialize
@@ -71,15 +84,14 @@ public class CurrencyService {
         List<CurrencyData> currencies = repository.selectByPlayers(players);
         Map<String, List<CurrencyData>> data = Maps.newHashMap();
         for (CurrencyData currency : currencies) {
-            MatherionPlayer player = currency.getPlayer();
+            String player = currency.getPlayer();
             if (player == null) {
                 continue;
             }
-            String nickname = player.getNickname();
-            if (data.containsKey(nickname)) {
-                data.get(nickname).add(currency);
+            if (data.containsKey(player)) {
+                data.get(player).add(currency);
             } else {
-                data.put(nickname, Lists.newArrayList(currency));
+                data.put(player, Lists.newArrayList(currency));
             }
         }
 
@@ -111,7 +123,7 @@ public class CurrencyService {
                 if (!currencyKeys.contains(currency.getName())) {
                     CurrencyData currencyData = new CurrencyData();
                     currencyData.setCurrency(currency);
-                    currencyData.setPlayer(player);
+                    currencyData.setPlayer(player.getNickname());
                     currencyData.setAmount(0);
                     try {
                         repository.create(currencyData);
@@ -127,18 +139,36 @@ public class CurrencyService {
         });
     }
 
-    public static double getCachedBalance(String nickname, String currency) {
-        Logger logger = CoreApplication.logger();
-        List<CurrencyData> balances = CACHE.get(nickname);
-        if (balances == null) {
-            logger.warning("Cannot find balance for player " + nickname + " and currency " + currency + ": cache is empty.");
-            return 0;
+    public boolean updateBalance(String player, Currency currency, double amount) {
+        String currencyIdentifier = currency.getName();
+        List<CurrencyData> currencyData = repository.selectFieldValues(Map.of("player", player, "currency", currencyIdentifier));
+        CurrencyData data = currencyData.stream().findFirst().orElse(null);
+        try {
+            if (data == null) {
+                data = new CurrencyData();
+                data.setPlayer(player);
+                data.setCurrency(currency);
+                data.setAmount(amount);
+                System.out.println("create");
+                repository.create(data);
+            } else {
+                data.setAmount(amount);
+                System.out.println("update");
+                repository.update(data);
+            }
+            System.out.println("return true");
+            return true;
+        } catch (IllegalAccessException e) {
+            System.out.println("error");
+            CoreApplication.logger().severe("Cannot solve update request: create/update currency data for player " + player + " and currency " + currencyIdentifier);
+            e.printStackTrace();
+            return false;
         }
-        Optional<CurrencyData> possibleBalance = balances.stream().filter(balanceData -> balanceData.getCurrency().getName().equalsIgnoreCase(currency)).findFirst();
-        if (possibleBalance.isEmpty()) {
-            logger.warning("Cannot find balance for player " + nickname + " and currency " + currency + ": currency doesn't exist in player's cache.");
-            return 0;
-        }
-        return possibleBalance.get().getAmount();
+    }
+
+    public double getBalance(String player, String currency) {
+        CurrencyData data = repository.selectFieldValues(Map.of("player", player, "currency", currency)).stream().findFirst().orElse(null);
+        System.out.println(data);
+        return data == null ? 0 : data.getAmount();
     }
 }

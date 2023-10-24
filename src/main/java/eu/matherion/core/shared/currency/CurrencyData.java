@@ -15,7 +15,7 @@ public class CurrencyData {
 
     @AttributeConvert(converter = CurrencyEntityTypeConverter.class)
     private Currency currency;
-    @AttributeConvert(converter = PlayerEntityTypeConverter.class)
-    private MatherionPlayer player;
+    //@AttributeConvert(converter = PlayerEntityTypeConverter.class)
+    private String player;
     private double amount;
 }

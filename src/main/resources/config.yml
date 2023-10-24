@@ -3,3 +3,26 @@ type: "survival"
 currencies:
   credits:
     display-name: "Kredity"
+
+disabled-pvp:
+  - "world_nether"
+  - "world_the_end"
+  - "MineWorld"
+
+banned-words:
+  - "kurva"
+  - "kokot"
+  - "pica"
+  - "piča"
+  - "píča"
+  - "píčo"
+  - "pico"
+  - "píčus"
+  - "pičus"
+  - "debile"
+  - "kokote"
+  - "kokoti"
+  - "kokotina"
+  - "kokotiny"
+  - "zmrd"
+  - "zmrdi"

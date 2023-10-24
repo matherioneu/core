@@ -3,8 +3,6 @@ package eu.matherion.core.shared.currency;
 import cz.maku.mommons.ef.converter.TypeConverter;
 import cz.maku.mommons.worker.WorkerReceiver;
 import eu.matherion.core.CoreApplication;
-import eu.matherion.core.shared.currency.Currency;
-import eu.matherion.core.shared.currency.CurrencyService;
 
 public class CurrencyEntityTypeConverter implements TypeConverter<Currency, String> {
 

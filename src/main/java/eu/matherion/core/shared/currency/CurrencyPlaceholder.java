@@ -19,7 +19,7 @@ public class CurrencyPlaceholder implements CorePlaceholder {
         String type = parameters.get(1);
 
         if (type.equalsIgnoreCase("balance")) {
-            double balance = matherionPlayer.getCachedBalance(currency);
+            double balance = matherionPlayer.getCachedCurrencyBalance(currency);
 
             if (parameters.size() > 2) {
                 String additional = parameters.get(2);
