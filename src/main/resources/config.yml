@@ -26,3 +26,16 @@ banned-words:
   - "kokotiny"
   - "zmrd"
   - "zmrdi"
+
+residence-command-blocker:
+  EventLand:
+    execute-commands: []
+    allowed-commands:
+      - '/spawn'
+      - '/cmi spawn'
+      - '/sethome'
+      - '/home'
+      - '/homes'
+      - '/warp'
+    blacklist-commands:
+      - '*'

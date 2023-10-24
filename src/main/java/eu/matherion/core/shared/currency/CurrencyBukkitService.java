@@ -6,6 +6,7 @@ import cz.maku.mommons.worker.annotation.Load;
 import cz.maku.mommons.worker.annotation.Service;
 import eu.matherion.core.shared.player.MatherionPlayer;
 import eu.matherion.core.shared.player.event.MatherionPlayerLoadEvent;
+import eu.matherion.core.shared.player.event.MatherionPlayerUnloadEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 
@@ -26,6 +27,7 @@ public class CurrencyBukkitService {
         MatherionPlayer matherionPlayer = event.getMatherionPlayer();
         currencyService.cachePlayer(matherionPlayer);
     }
+
 
     @BukkitCommand("currency")
     public void onCurrencyCommand(CommandSender sender, String[] args) {

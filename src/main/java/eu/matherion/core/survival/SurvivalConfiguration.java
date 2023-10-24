@@ -10,6 +10,11 @@ public final class SurvivalConfiguration {
     public static final Material ADMIN_VIEW_MATERIAL = Material.BLAZE_POWDER;
     public static final String ADMIN_VIEW_INVENTORY_TITLE = "§4§lNáhled inventáře";
     public static final String DISABLED_PVP_WORLDS_CONFIG_PROPERTY = "disabled-pvp";
+    public static final String RESIDENCE_COMMAND_BLOCKER_CATEGORY_CONFIG_PROPERTY = "residence-command-blocker";
+    public static final String RESIDENCE_COMMAND_BLOCKER_EXECUTE_COMMANDS_CONFIG_PROPERTY = "execute-commands";
+    public static final String RESIDENCE_COMMAND_BLOCKER_ALLOWED_COMMANDS_CONFIG_PROPERTY = "allowed-commands";
+    public static final String RESIDENCE_COMMAND_BLOCKER_BLACKLIST_COMMANDS_CONFIG_PROPERTY = "blacklist-commands";
+    public static final String RESIDENCE_COMMAND_BLOCKER_BYPASS_PERMISSION = "matherion.residenceblock.bypass";
     public static final List<String> CHAT_TAGS = List.of("@helper", "@admin", "@owner");
     public static final List<String> BLOCKED_CHAT_MESSAGES = List.of(
             "I joined using ChatCraft from my Android device! Download it for free!",

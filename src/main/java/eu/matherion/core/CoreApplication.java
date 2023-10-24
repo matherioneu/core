@@ -14,6 +14,7 @@ import eu.matherion.core.shared.player.PlayerService;
 import eu.matherion.core.survival.listener.ChatListenerService;
 import eu.matherion.core.survival.listener.PvPListenerService;
 import eu.matherion.core.survival.listener.SecurityListenerService;
+import eu.matherion.core.survival.residence.ResidenceDependencyProvider;
 import eu.matherion.core.survival.trade.TradeDependencyProvider;
 import eu.matherion.core.survival.administrator.AdminBukkitService;
 
@@ -63,7 +64,7 @@ public class CoreApplication extends WorkerPlugin {
         }
         if (coreType.equals("survival")) {
             logger.info("Core plugin will be loaded for survival server.");
-            dependencies = CoreDependencies.resolveDependencies(TradeDependencyProvider.class, PlaceholderAPIDependencyProvider.class, LuckPermsDependencyProvider.class);
+            dependencies = CoreDependencies.resolveDependencies(TradeDependencyProvider.class, PlaceholderAPIDependencyProvider.class, LuckPermsDependencyProvider.class, ResidenceDependencyProvider.class);
         }
     }
 

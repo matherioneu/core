@@ -13,8 +13,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.List;
 import java.util.Optional;
 
-import static eu.matherion.core.survival.SurvivalConfiguration.BLOCKED_CHAT_MESSAGES;
-import static eu.matherion.core.survival.SurvivalConfiguration.CHAT_TAGS;
+import static eu.matherion.core.survival.SurvivalConfiguration.*;
 
 @Service(listener = true)
 public class ChatListenerService {
@@ -58,15 +57,11 @@ public class ChatListenerService {
                     if (warns == null) warns = 0;
                     double warnsInt = (double) warns;
                     warnsInt++;
-                    if (warnsInt == 3) {
-                        Bukkit.getScheduler().runTask(CoreApplication.getPlugin(CoreApplication.class), () -> {
-                            player.kickPlayer("§4§l! §cByl jsi vyhozen z důvodu použití zakázaných slov!");
-                        });
+                    if (warnsInt == BANNED_WORDS_WARNS_KICK) {
+                        Bukkit.getScheduler().runTask(CoreApplication.getPlugin(CoreApplication.class), () -> player.kickPlayer("§4§l! §cByl jsi vyhozen z důvodu použití zakázaných slov!"));
                         warnsInt = 0;
                     }
                     matherionPlayer.setValueAsync("banned-words-warns", warnsInt, true).thenAccept(response -> {
-                        System.out.println(response.getCode());
-                        System.out.println(response.getContent());
                         if (response instanceof ExceptionResponse exceptionResponse) {
                             exceptionResponse.getException().printStackTrace();
                         }
