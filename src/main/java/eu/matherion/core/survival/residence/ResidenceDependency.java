@@ -3,8 +3,6 @@ package eu.matherion.core.survival.residence;
 import com.bekvon.bukkit.residence.Residence;
 import eu.matherion.core.CoreApplication;
 import eu.matherion.core.shared.dependency.CoreDependency;
-import me.Zrips.TradeMe.TradeMe;
-import org.bukkit.Bukkit;
 
 public class ResidenceDependency extends CoreDependency<Residence> {
 
@@ -22,6 +20,8 @@ public class ResidenceDependency extends CoreDependency<Residence> {
 
     @Override
     public void init() {
+        coreApplication.getLogger().info("Registering Residence command blocker listener.");
         coreApplication.getServer().getPluginManager().registerEvents(new ResidenceCommandBlockerListener(coreApplication, get()), coreApplication);
     }
+
 }

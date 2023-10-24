@@ -6,6 +6,7 @@ import eu.matherion.core.CoreApplication;
 import eu.matherion.core.shared.currency.Currency;
 import eu.matherion.core.shared.currency.CurrencyService;
 import eu.matherion.core.shared.permissions.luckperms.LuckPermsDependency;
+import eu.matherion.core.shared.permissions.luckperms.LuckPermsDependencyProvider;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import org.bukkit.entity.Player;
@@ -51,7 +52,7 @@ public class MatherionPlayer extends CloudPlayer {
     }
 
     public String getLuckPermsRank() {
-        LuckPermsDependency luckPermsDependency = CoreApplication.getDependency(LuckPermsDependency.class);
+        LuckPermsDependency luckPermsDependency = CoreApplication.getDependency(LuckPermsDependencyProvider.class);
         if (luckPermsDependency == null) return null;
         LuckPerms luckPerms = luckPermsDependency.get();
         if (luckPerms == null) return null;

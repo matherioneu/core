@@ -39,3 +39,20 @@ residence-command-blocker:
       - '/warp'
     blacklist-commands:
       - '*'
+
+mineworld:
+  spawn-location: "MineWorld;255;50;255;1;1"
+  maximum: 5000
+  blocks:
+    GRASS_BLOCK:
+      price: 1
+  welcome-message:
+    - '&r'
+    - '&r'
+    - '                       &e&nMineWorld'
+    - '&r'
+    - '&7Nyní získáváš peníze kopáním materiálů &cpouze &7v &e/mineworld&7.'
+    - '  &71x Grass Block = &e${GRASS_BLOCK}'
+    - '&r'
+    - '&cAle pozor &4- &7za den můžeš vytěžit jen {maximum} bloků!'
+    - '&r'
