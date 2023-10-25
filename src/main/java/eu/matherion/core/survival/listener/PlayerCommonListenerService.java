@@ -11,7 +11,6 @@ import eu.matherion.core.shared.player.MatherionPlayer;
 import eu.matherion.core.shared.player.event.MatherionPlayerLoadEvent;
 import eu.matherion.core.survival.residence.ResidenceDependency;
 import eu.matherion.core.survival.residence.ResidenceDependencyProvider;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,6 +18,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -41,9 +41,10 @@ public class PlayerCommonListenerService {
         }
     }
 
-    @BukkitEvent(EntityDamageByEntityEvent.class)
-    public void onDamage(EntityDamageByEntityEvent event) {
-        Entity damager = event.getDamager();
+    @BukkitEvent(EntityDamageEvent.class)
+    public void onDamage(EntityDamageEvent event) {
+        if (!(event instanceof EntityDamageByEntityEvent damageByEntityEvent)) return;
+        Entity damager = damageByEntityEvent.getDamager();
         if (!(damager instanceof Player player)) return;
         Entity entity = event.getEntity();
         if (!(entity instanceof ItemFrame itemFrame)) return;

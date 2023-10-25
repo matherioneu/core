@@ -59,3 +59,4 @@ mineworld:
 
 webhooks:
   maintenance: 'https://discord.com/api/webhooks/1166686239018209301/2OHIa8oSQ6FXFSg2rWr18nWz1jhnH0NKinYaAQooqhDl9MJCEzJmqziWcAeOD0r3UbPQ'
+reviews: 'https://api.minecraftservery.eu/info.php?id=248'

@@ -4,6 +4,7 @@ import cz.maku.mommons.worker.annotation.BukkitCommand;
 import cz.maku.mommons.worker.annotation.Service;
 import eu.matherion.core.CoreApplication;
 import eu.matherion.core.shared.commons.Bukkits;
+import eu.matherion.core.shared.commons.Rests;
 import eu.matherion.core.shared.permissions.luckperms.LuckPermsDependency;
 import eu.matherion.core.shared.permissions.luckperms.LuckPermsDependencyProvider;
 import eu.matherion.core.shared.player.MatherionPlayer;
@@ -21,6 +22,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +30,7 @@ import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service(commands = true)
 public class CommonCommandsService {
@@ -168,5 +171,37 @@ public class CommonCommandsService {
         Inventory inventory = chest.getInventory();
         player.openInventory(inventory);
         player.sendMessage("§8§l! §7Otevřel jsi veřejnou truhlu pro všechny hráče.");
+    }
+
+    @BukkitCommand("recenze")
+    public void onReviewCommand(CommandSender sender) {
+        if (!(sender instanceof Player player)) return;
+        String reviewsUrl = coreApplication.getConfig().getString("reviews");
+        if (reviewsUrl == null) {
+            sender.sendMessage("§4§l! §cChyba, není nastavená url pro stahování dat.");
+            return;
+        }
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                Optional<ReviewSiteInformationResponse> responseOptional = Rests.get(reviewsUrl, ReviewSiteInformationResponse.class);
+                return responseOptional.orElse(null);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).thenAccept(response -> {
+            player.sendMessage("§8■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■");
+            player.sendMessage("§8■");
+            player.sendMessage("§8■ §7Zrecenzovat server můžeš zde:");
+            player.sendMessage("§8■ §bhttps://minecraftservery.eu/recenze/248");
+            player.sendMessage("§8■ ");
+            player.sendMessage("§8■ §7Celkově recenzí: §b" + response.review_count());
+            player.sendMessage("§8■ §7Celkové hodnocení: §b" + response.rating());
+            player.sendMessage("§8■");
+            player.sendMessage("§8■ §7Poslední recenzent: §b" + response.last_review_name());
+            player.sendMessage("§8■ §7Poslední hodnocení: §b" + response.last_review_rate());
+            player.sendMessage("§8■ ");
+            player.sendMessage("§8■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■");
+        });
     }
 }
