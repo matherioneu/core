@@ -13,6 +13,7 @@ import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
 import net.luckperms.api.node.NodeType;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Chest;
@@ -204,4 +205,32 @@ public class CommonCommandsService {
             player.sendMessage("§8■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■");
         });
     }
+
+    private void teleportToSurvivalLocation(Player player, String configKey) {
+        String rawLocation = coreApplication.getConfig().getString(configKey);
+        if (rawLocation == null) {
+            player.sendMessage("§4§l! §cChyba, lokace není nastavena!");
+            return;
+        }
+        Bukkits.teleportFancy(player, 3, Bukkits.stringToLocation(rawLocation));
+    }
+
+    @BukkitCommand("priroda")
+    public void onNatureCommand(CommandSender sender) {
+        if (!(sender instanceof Player player)) return;
+        teleportToSurvivalLocation(player, "priroda");
+    }
+
+    @BukkitCommand("nether")
+    public void onNetherCommand(CommandSender sender) {
+        if (!(sender instanceof Player player)) return;
+        teleportToSurvivalLocation(player, "nether");
+    }
+
+    @BukkitCommand("theend")
+    public void onTheEndCommand(CommandSender sender) {
+        if (!(sender instanceof Player player)) return;
+        teleportToSurvivalLocation(player, "theend");
+    }
+
 }
