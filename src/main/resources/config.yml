@@ -56,3 +56,6 @@ mineworld:
     - '&r'
     - '&cAle pozor &4- &7za den můžeš vytěžit jen {maximum} bloků!'
     - '&r'
+
+webhooks:
+  maintenance: 'https://discord.com/api/webhooks/1166686239018209301/2OHIa8oSQ6FXFSg2rWr18nWz1jhnH0NKinYaAQooqhDl9MJCEzJmqziWcAeOD0r3UbPQ'

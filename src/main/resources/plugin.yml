@@ -5,6 +5,7 @@ author: maku
 description: Core plugin for Matherion servers
 api-version: 1.20
 depend:
+  - MatherionWhitelist
   - MommonsLoader
 softdepend:
   - CMI

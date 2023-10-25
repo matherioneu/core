@@ -8,6 +8,8 @@ import eu.matherion.core.shared.currency.CurrencyService;
 import eu.matherion.core.shared.dependency.CoreDependencies;
 import eu.matherion.core.shared.dependency.CoreDependency;
 import eu.matherion.core.shared.dependency.CoreDependencyClassProvider;
+import eu.matherion.core.shared.maintenance.MaintenanceBukkitService;
+import eu.matherion.core.shared.maintenance.MaintenanceService;
 import eu.matherion.core.shared.permissions.luckperms.LuckPermsDependencyProvider;
 import eu.matherion.core.shared.placeholderapi.PlaceholderAPIDependencyProvider;
 import eu.matherion.core.shared.player.PlayerHandlingBukkitService;
@@ -55,7 +57,7 @@ public class CoreApplication extends WorkerPlugin {
 
     @Override
     public List<Class<?>> registerServices() {
-        List<Class<?>> services = Lists.newArrayList(CurrencyService.class, CurrencyBukkitService.class, PlayerService.class, PlayerHandlingBukkitService.class);
+        List<Class<?>> services = Lists.newArrayList(CurrencyService.class, CurrencyBukkitService.class, PlayerService.class, PlayerHandlingBukkitService.class, MaintenanceBukkitService.class, MaintenanceService.class);
         if (coreType.equals("survival")) {
             services.addAll(List.of(AdminBukkitService.class, PvPListenerService.class, SecurityListenerService.class, ChatListenerService.class, MineWorldService.class, MineWorldBukkitService.class, ConfigBukkitService.class, PlayerConnectionListenerService.class));
             if (Bukkit.getPluginManager().getPlugin("CMI") != null) {
