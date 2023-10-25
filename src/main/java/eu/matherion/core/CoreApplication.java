@@ -20,7 +20,7 @@ import eu.matherion.core.survival.config.ConfigBukkitService;
 import eu.matherion.core.survival.glow.GlowBukkitService;
 import eu.matherion.core.survival.glow.GlowService;
 import eu.matherion.core.survival.listener.ChatListenerService;
-import eu.matherion.core.survival.listener.PlayerConnectionListenerService;
+import eu.matherion.core.survival.listener.PlayerCommonListenerService;
 import eu.matherion.core.survival.listener.PvPListenerService;
 import eu.matherion.core.survival.listener.SecurityListenerService;
 import eu.matherion.core.survival.mineworld.MineWorldBukkitService;
@@ -68,7 +68,7 @@ public class CoreApplication extends WorkerPlugin {
                     MineWorldService.class,
                     MineWorldBukkitService.class,
                     ConfigBukkitService.class,
-                    PlayerConnectionListenerService.class,
+                    PlayerCommonListenerService.class,
                     CommonCommandsService.class
             ));
             if (Bukkit.getPluginManager().getPlugin("CMI") != null) {
