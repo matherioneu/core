@@ -7,6 +7,7 @@ import cz.maku.mommons.worker.annotation.BukkitEvent;
 import cz.maku.mommons.worker.annotation.Load;
 import cz.maku.mommons.worker.annotation.Service;
 import eu.matherion.core.shared.player.event.MatherionPlayerLoadEvent;
+import eu.matherion.core.shared.player.event.MatherionPlayerUnloadEvent;
 import org.bukkit.Bukkit;
 
 @Service(listener = true)
@@ -21,13 +22,17 @@ public class PlayerHandlingBukkitService {
         MatherionPlayer matherionPlayer = new MatherionPlayer(cloudPlayer);
         playerService.addPlayer(matherionPlayer);
 
-
         MatherionPlayerLoadEvent loadEvent = new MatherionPlayerLoadEvent(matherionPlayer);
         Bukkit.getPluginManager().callEvent(loadEvent);
     }
 
     @BukkitEvent(value = CloudPlayerPreUnloadEvent.class)
     public void onPlayerUnload(CloudPlayerPreUnloadEvent event) {
+        playerService.getPlayer(event.getPlayer().getName()).ifPresent(matherionPlayer -> {
+            MatherionPlayerUnloadEvent unloadEvent = new MatherionPlayerUnloadEvent(matherionPlayer);
+            Bukkit.getPluginManager().callEvent(unloadEvent);
+        });
+
         CloudPlayer cloudPlayer = event.getCloudPlayer();
         playerService.getPlayer(cloudPlayer.getNickname()).ifPresent(playerService::removePlayer);
     }

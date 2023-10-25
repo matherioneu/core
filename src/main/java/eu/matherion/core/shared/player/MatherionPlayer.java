@@ -1,6 +1,9 @@
 package eu.matherion.core.shared.player;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import cz.maku.mommons.player.CloudPlayer;
+import cz.maku.mommons.server.Server;
 import cz.maku.mommons.worker.WorkerReceiver;
 import eu.matherion.core.CoreApplication;
 import eu.matherion.core.shared.currency.Currency;
@@ -9,6 +12,8 @@ import eu.matherion.core.shared.permissions.luckperms.LuckPermsDependency;
 import eu.matherion.core.shared.permissions.luckperms.LuckPermsDependencyProvider;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -73,4 +78,17 @@ public class MatherionPlayer extends CloudPlayer {
     public CompletableFuture<Boolean> updateCurrencyBalanceAsync(Currency currency, double amount) {
         return CompletableFuture.supplyAsync(() -> updateCurrencyBalance(currency, amount));
     }
+
+    public boolean executeCommand(String command) {
+        return Bukkit.dispatchCommand(bukkit(), command);
+    }
+
+    public boolean hasPermission(String permission) {
+        return bukkit().hasPermission(permission);
+    }
+
+    public boolean changeWorld(World world) {
+        return bukkit().teleport(world.getSpawnLocation());
+    }
+
 }
