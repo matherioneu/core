@@ -13,6 +13,7 @@ import eu.matherion.core.shared.placeholderapi.PlaceholderAPIDependencyProvider;
 import eu.matherion.core.shared.player.PlayerHandlingBukkitService;
 import eu.matherion.core.shared.player.PlayerService;
 import eu.matherion.core.survival.administrator.AdminBukkitService;
+import eu.matherion.core.survival.config.ConfigBukkitService;
 import eu.matherion.core.survival.listener.ChatListenerService;
 import eu.matherion.core.survival.listener.PvPListenerService;
 import eu.matherion.core.survival.listener.SecurityListenerService;
@@ -51,7 +52,7 @@ public class CoreApplication extends WorkerPlugin {
     public List<Class<?>> registerServices() {
         List<Class<?>> services = Lists.newArrayList(CurrencyService.class, CurrencyBukkitService.class, PlayerService.class, PlayerHandlingBukkitService.class);
         if (coreType.equals("survival")) {
-            services.addAll(List.of(AdminBukkitService.class, PvPListenerService.class, SecurityListenerService.class, ChatListenerService.class, MineWorldService.class, MineWorldBukkitService.class));
+            services.addAll(List.of(AdminBukkitService.class, PvPListenerService.class, SecurityListenerService.class, ChatListenerService.class, MineWorldService.class, MineWorldBukkitService.class, ConfigBukkitService.class));
         }
         return services;
     }

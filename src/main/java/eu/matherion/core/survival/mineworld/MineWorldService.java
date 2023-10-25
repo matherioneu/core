@@ -30,7 +30,7 @@ public class MineWorldService {
     private Location spawnLocation;
 
     @Initialize
-    private void registerBlocks() {
+    public void registerBlocks() {
         CoreApplication coreApplication = CoreApplication.getPlugin(CoreApplication.class);
         ConfigurationSection configurationSection = coreApplication.getConfig().getConfigurationSection(MINEWORLD_CONFIG_PROPERTY);
         if (configurationSection == null) {
