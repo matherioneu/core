@@ -9,6 +9,11 @@ import eu.matherion.core.survival.mineworld.MineWorldService;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 @Service(commands = true)
 public class ConfigBukkitService {
 
@@ -19,6 +24,11 @@ public class ConfigBukkitService {
     private void reload() {
         mineWorldService.registerBlocks();
     }
+
+    private final Map<String, Function<Player, String>> placeholders = Map.of(
+            "{location}", (player) -> Bukkits.locationToString(player.getLocation()),
+            "{lookingblock}", (player) -> Bukkits.locationToString(player.getTargetBlock(null, 200).getLocation())
+    );
 
     @BukkitCommand("config")
     public void onConfigCommand(CommandSender sender, String[] args) {
@@ -44,12 +54,16 @@ public class ConfigBukkitService {
             return;
         }
         String value = args[2];
-        if (value.contains("{location}")) {
-            if (!(sender instanceof Player player)) {
-                sender.sendMessage("§4§l! §cJako konzole nemůžeš použít placeholder.");
-                return;
+        for (Map.Entry<String, Function<Player, String>> entry : placeholders.entrySet()) {
+            String placeholder = entry.getKey();
+            Function<Player, String> replaceFunction = entry.getValue();
+            if (value.contains(placeholder)) {
+                if (!(sender instanceof Player player)) {
+                    sender.sendMessage("§4§l! §cJako konzole nemůžeš použít placeholdery.");
+                    return;
+                }
+                value = value.replace(placeholder, replaceFunction.apply(player));
             }
-            value = value.replace("{location}", Bukkits.locationToString(player.getLocation()));
         }
         if (action.equalsIgnoreCase("set")) {
             coreApplication.getConfig().set(path, value);

@@ -3,6 +3,7 @@ package eu.matherion.core.survival;
 import cz.maku.mommons.worker.annotation.BukkitCommand;
 import cz.maku.mommons.worker.annotation.Service;
 import eu.matherion.core.CoreApplication;
+import eu.matherion.core.shared.commons.Bukkits;
 import eu.matherion.core.shared.permissions.luckperms.LuckPermsDependency;
 import eu.matherion.core.shared.permissions.luckperms.LuckPermsDependencyProvider;
 import eu.matherion.core.shared.player.MatherionPlayer;
@@ -12,8 +13,11 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
 import net.luckperms.api.node.NodeType;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.block.Chest;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -27,6 +31,8 @@ import java.util.Optional;
 
 @Service(commands = true)
 public class CommonCommandsService {
+
+    private final CoreApplication coreApplication = CoreApplication.getPlugin(CoreApplication.class);
 
     @BukkitCommand("checkpermission")
     public void onCheckPermCommand(CommandSender sender, String[] args) {
@@ -147,5 +153,20 @@ public class CommonCommandsService {
             }
             player.sendMessage(String.format("§8§l! §7Tvůj rank §f%s §7vyprší §f%s§7.", ChatColor.translateAlternateColorCodes('&', prefix), time));
         });
+    }
+
+    @BukkitCommand(value = "publicchest", aliases = {"truhla", "verejnatruhla"})
+    public void onPublicChestCommand(CommandSender sender) {
+        if (!(sender instanceof Player player)) return;
+        String publicChestRaw = coreApplication.getConfig().getString("public-chest");
+        if (publicChestRaw == null) {
+            player.sendMessage("§4§l! §cChyba, veřejná truhla nebyla nastavená.");
+            return;
+        }
+        Location location = Bukkits.stringToLocation(publicChestRaw);
+        Chest chest = (Chest) location.getBlock().getState();
+        Inventory inventory = chest.getInventory();
+        player.openInventory(inventory);
+        player.sendMessage("§8§l! §7Otevřel jsi veřejnou truhlu pro všechny hráče.");
     }
 }
