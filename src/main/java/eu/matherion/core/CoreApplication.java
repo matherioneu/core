@@ -14,6 +14,8 @@ import eu.matherion.core.shared.player.PlayerHandlingBukkitService;
 import eu.matherion.core.shared.player.PlayerService;
 import eu.matherion.core.survival.administrator.AdminBukkitService;
 import eu.matherion.core.survival.config.ConfigBukkitService;
+import eu.matherion.core.survival.glow.GlowBukkitService;
+import eu.matherion.core.survival.glow.GlowService;
 import eu.matherion.core.survival.listener.ChatListenerService;
 import eu.matherion.core.survival.listener.PlayerConnectionListenerService;
 import eu.matherion.core.survival.listener.PvPListenerService;
@@ -22,6 +24,8 @@ import eu.matherion.core.survival.mineworld.MineWorldBukkitService;
 import eu.matherion.core.survival.mineworld.MineWorldService;
 import eu.matherion.core.survival.residence.ResidenceDependencyProvider;
 import eu.matherion.core.survival.trade.TradeDependencyProvider;
+import me.zort.containr.Containr;
+import org.bukkit.Bukkit;
 
 import java.util.List;
 import java.util.Map;
@@ -54,12 +58,17 @@ public class CoreApplication extends WorkerPlugin {
         List<Class<?>> services = Lists.newArrayList(CurrencyService.class, CurrencyBukkitService.class, PlayerService.class, PlayerHandlingBukkitService.class);
         if (coreType.equals("survival")) {
             services.addAll(List.of(AdminBukkitService.class, PvPListenerService.class, SecurityListenerService.class, ChatListenerService.class, MineWorldService.class, MineWorldBukkitService.class, ConfigBukkitService.class, PlayerConnectionListenerService.class));
+            if (Bukkit.getPluginManager().getPlugin("CMI") != null) {
+                services.addAll(List.of(GlowBukkitService.class, GlowService.class));
+            }
         }
         return services;
     }
 
     @Override
     public void load() {
+        Containr.init(this);
+
         getConfig().options().copyDefaults(true);
         saveConfig();
         Logger logger = getLogger();
