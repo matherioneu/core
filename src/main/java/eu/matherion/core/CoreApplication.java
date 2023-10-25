@@ -14,6 +14,7 @@ import eu.matherion.core.shared.permissions.luckperms.LuckPermsDependencyProvide
 import eu.matherion.core.shared.placeholderapi.PlaceholderAPIDependencyProvider;
 import eu.matherion.core.shared.player.PlayerHandlingBukkitService;
 import eu.matherion.core.shared.player.PlayerService;
+import eu.matherion.core.survival.CommonCommandsService;
 import eu.matherion.core.survival.administrator.AdminBukkitService;
 import eu.matherion.core.survival.config.ConfigBukkitService;
 import eu.matherion.core.survival.glow.GlowBukkitService;
@@ -59,7 +60,17 @@ public class CoreApplication extends WorkerPlugin {
     public List<Class<?>> registerServices() {
         List<Class<?>> services = Lists.newArrayList(CurrencyService.class, CurrencyBukkitService.class, PlayerService.class, PlayerHandlingBukkitService.class, MaintenanceBukkitService.class, MaintenanceService.class);
         if (coreType.equals("survival")) {
-            services.addAll(List.of(AdminBukkitService.class, PvPListenerService.class, SecurityListenerService.class, ChatListenerService.class, MineWorldService.class, MineWorldBukkitService.class, ConfigBukkitService.class, PlayerConnectionListenerService.class));
+            services.addAll(List.of(
+                    AdminBukkitService.class,
+                    PvPListenerService.class,
+                    SecurityListenerService.class,
+                    ChatListenerService.class,
+                    MineWorldService.class,
+                    MineWorldBukkitService.class,
+                    ConfigBukkitService.class,
+                    PlayerConnectionListenerService.class,
+                    CommonCommandsService.class
+            ));
             if (Bukkit.getPluginManager().getPlugin("CMI") != null) {
                 services.addAll(List.of(GlowBukkitService.class, GlowService.class));
             }
