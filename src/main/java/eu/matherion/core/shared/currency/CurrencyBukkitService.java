@@ -28,7 +28,6 @@ public class CurrencyBukkitService {
         currencyService.cachePlayer(matherionPlayer);
     }
 
-
     @BukkitCommand("currency")
     public void onCurrencyCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {

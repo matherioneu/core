@@ -15,10 +15,13 @@ import eu.matherion.core.shared.placeholderapi.PlaceholderAPIDependencyProvider;
 import eu.matherion.core.shared.player.PlayerHandlingBukkitService;
 import eu.matherion.core.shared.player.PlayerService;
 import eu.matherion.core.survival.CommonCommandsService;
+import eu.matherion.core.survival.ProfileBukkitService;
 import eu.matherion.core.survival.administrator.AdminBukkitService;
 import eu.matherion.core.survival.config.ConfigBukkitService;
 import eu.matherion.core.survival.glow.GlowBukkitService;
 import eu.matherion.core.survival.glow.GlowService;
+import eu.matherion.core.survival.level.LevelBukkitService;
+import eu.matherion.core.survival.level.LevelService;
 import eu.matherion.core.survival.listener.ChatListenerService;
 import eu.matherion.core.survival.listener.PlayerCommonListenerService;
 import eu.matherion.core.survival.listener.PvPListenerService;
@@ -69,7 +72,10 @@ public class CoreApplication extends WorkerPlugin {
                     MineWorldBukkitService.class,
                     ConfigBukkitService.class,
                     PlayerCommonListenerService.class,
-                    CommonCommandsService.class
+                    CommonCommandsService.class,
+                    LevelBukkitService.class,
+                    LevelService.class,
+                    ProfileBukkitService.class
             ));
             if (Bukkit.getPluginManager().getPlugin("CMI") != null) {
                 services.addAll(List.of(GlowBukkitService.class, GlowService.class));
