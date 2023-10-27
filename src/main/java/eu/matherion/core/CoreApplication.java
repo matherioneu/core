@@ -29,6 +29,8 @@ import eu.matherion.core.survival.listener.SecurityListenerService;
 import eu.matherion.core.survival.mineworld.MineWorldBukkitService;
 import eu.matherion.core.survival.mineworld.MineWorldService;
 import eu.matherion.core.survival.residence.ResidenceDependencyProvider;
+import eu.matherion.core.survival.settings.SettingsBukkitService;
+import eu.matherion.core.survival.settings.SettingsService;
 import eu.matherion.core.survival.trade.TradeDependencyProvider;
 import me.zort.containr.Containr;
 import org.bukkit.Bukkit;
@@ -75,7 +77,9 @@ public class CoreApplication extends WorkerPlugin {
                     CommonCommandsService.class,
                     LevelBukkitService.class,
                     LevelService.class,
-                    ProfileBukkitService.class
+                    ProfileBukkitService.class,
+                    SettingsService.class,
+                    SettingsBukkitService.class
             ));
             if (Bukkit.getPluginManager().getPlugin("CMI") != null) {
                 services.addAll(List.of(GlowBukkitService.class, GlowService.class));

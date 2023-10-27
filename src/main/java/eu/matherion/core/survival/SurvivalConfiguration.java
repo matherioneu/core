@@ -26,5 +26,6 @@ public final class SurvivalConfiguration {
             "I joined using ChatCraft from my iOS device! Download it for free!"
     );
     public static final int BANNED_WORDS_WARNS_KICK = 3;
+    public static final String PLAYER_SETTINGS_STORAGE_KEY = "survival-settings";
 
 }
